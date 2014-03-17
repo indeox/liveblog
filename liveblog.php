@@ -317,7 +317,7 @@ final class WPCOM_Liveblog {
 		 */
 		foreach( $entries as $entry ) {
 			$latest_timestamp   = max( $latest_timestamp, $entry->get_timestamp() );
-			$entries_for_json[] = $entry->for_json();
+			$entries_for_json[] = isset($_GET['lite']) ? $entry->for_json_lite() : $entry->for_json();
 		}
 
 		// Setup our data to return via JSON

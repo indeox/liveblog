@@ -65,6 +65,26 @@ class WPCOM_Liveblog_Entry {
 		);
 	}
 
+	public function for_json_lite() {
+		$entry_id          = $this->comment->comment_ID;
+		$post_id           = $this->comment->comment_post_ID;
+
+		if ($this->replaces) {
+			$guid = $post_id.$this->replaces;
+		} else {
+			$guid = $post_id.$this->get_id();
+		}
+
+		return (object) array(
+			'id'        => $this->replaces ? $this->replaces : $this->get_id(),
+			'guid'      => $guid,
+			'type'      => $this->get_type(),
+			'timestamp' => $this->get_timestamp(),
+			'dateiso'   => date('c', strtotime($this->comment->comment_date_gmt)),
+			'html'      => self::render_content( get_comment_text( $entry_id ), $this->comment )
+		);
+	}
+
 	public function get_fields_for_render() {
 		$entry_id     = $this->comment->comment_ID;
 		$post_id      = $this->comment->comment_post_ID;
